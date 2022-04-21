@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class Sort {
 
   static int NUMBER_OF_ERRORS_OF_EMAIL = 4;
+  static int NUMBER_OF_ERRORS_OF_LASTNAME_OR_FIRSTNAME = 2;
 
   public static List<Volunteer> removeDuplicate(List<Volunteer> volunteers) {
     List<Volunteer> result = new ArrayList<>();
@@ -24,7 +25,8 @@ public class Sort {
       return Arrays.asList(volunteer);
     List<Volunteer> result = new ArrayList<>();
     for (Volunteer vol : volunteers) {
-      if (Compare.compareTo(volunteer.firstName + volunteer.lastName, vol.firstName + vol.lastName) <= 2) {
+      if (Compare.compareTo(volunteer.firstName + volunteer.lastName,
+          vol.firstName + vol.lastName) <= NUMBER_OF_ERRORS_OF_LASTNAME_OR_FIRSTNAME) {
         result.add(vol);
       }
     }
@@ -39,13 +41,6 @@ public class Sort {
       if (Compare.compareTo(volunteer.eMail, vol.eMail) <= NUMBER_OF_ERRORS_OF_EMAIL
           || Compare.compareTo(volunteer.phone, vol.phone) == 0
           || Compare.compareTo(volunteer.nickName, vol.nickName) == 0) {
-
-        // if (volunteer.eMail == "" && vol.eMail == "")
-        // continue;
-        // if (volunteer.phone == "" && vol.phone == "")
-        // continue;
-        // if (volunteer.nickName == "" && vol.nickName == "")
-        // continue;
         result.add(vol);
       }
     }
@@ -91,10 +86,6 @@ public class Sort {
         return;
       listVolunteerAlreadyAdd.addAll(volunteersByCompletName);
       // si il existe on ne l'ajoute pas
-      if (volunteer.firstName.isBlank()
-          && volunteer.lastName.isBlank()) {
-        System.out.println("");
-      }
       result.add(volunterFusion);
     });
 
@@ -102,4 +93,40 @@ public class Sort {
 
   }
 
+  public static List<Volunteer> fusionByEmail(List<Volunteer> uniqueListVolunteer) {
+
+    // List of volunteers already add in the emptyList
+    List<Volunteer> listVolunteerAlreadyAdd = new ArrayList<>();
+    List<Volunteer> result = new ArrayList<>();
+
+    // foreach sur UniqueListVolunteer
+    uniqueListVolunteer.forEach(volunteer -> {
+      // donne toutes les occurences avec l'email du volunteer
+
+      List<Volunteer> allOccurenceByEmail = getOccurenceByEmail(volunteer, uniqueListVolunteer);
+      Volunteer fusion = Compare.fusion(allOccurenceByEmail);
+      if (fusion.isBlank())
+        return;
+      if (listVolunteerAlreadyAdd.contains(fusion))
+        return;
+      listVolunteerAlreadyAdd.add(fusion);
+      result.add(fusion);
+
+    });
+    return result;
+  }
+
+  public static List<Volunteer> getOccurenceByEmail(Volunteer volunteer, List<Volunteer> volunteers) {
+
+    List<Volunteer> result = new ArrayList<>();
+    if (volunteer.eMail.isBlank())
+      return result;
+
+    for (Volunteer vol : volunteers) {
+      if (Compare.hasCompleteWord(volunteer.eMail, vol.eMail)) {
+        result.add(vol);
+      }
+    }
+    return result;
+  }
 }

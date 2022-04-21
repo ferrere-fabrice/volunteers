@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 public class App {
     public static void main(String[] args) throws IOException {
         Pattern quotes = Pattern.compile("^\"([^\"]*)\"$");
+        
         Path path = Paths.get("src/main/resources/data.csv");
         List<Volunteer> inputVolunteers = Files.readAllLines(path).stream()
                 .map(string -> Arrays.stream(string.split(";", -1))

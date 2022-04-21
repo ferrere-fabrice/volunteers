@@ -65,4 +65,6 @@ public class Compare {
     return new Volunteer(fusionFirstName.toString(), fusionLastName.toString(), fusioNickName.toString(),
         fusionEmail.toString(), fusionPhone.toString());
   }
+
+  func
 }

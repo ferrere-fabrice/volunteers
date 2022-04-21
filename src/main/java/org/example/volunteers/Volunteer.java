@@ -67,4 +67,14 @@ public final class Volunteer {
             return false;
         return phone.equals(volunteer.phone);
     }
+
+    public boolean isBlank() {
+        if (firstName.isBlank()
+                && lastName.isBlank()
+                && nickName.isBlank()
+                && eMail.isBlank() && phone.isBlank())
+            return true;
+
+        return false;
+    }
 }
